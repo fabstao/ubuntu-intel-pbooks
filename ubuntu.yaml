@@ -1,0 +1,112 @@
+---
+- name: Configure Ubuntu for Intel environment
+  hosts: ubuntu
+  remote_user: ubuntu
+  tasks:
+
+          - name: Echo hostname
+            command: hostname
+
+          - name: Customize issue
+            shell: echo "Ubuntu Customized by Intel Cloud Native GDC" > /etc/issue ; echo >> /etc/issue
+
+          - name: Customize issue.net
+            shell: echo "Ubuntu Customized by Intel Cloud Native GDC" > /etc/issue.net; echo >> /etc/issue.net
+
+          - name: Customize motd
+            copy:
+              src: ./motd
+              dest: /etc/motd
+              owner: root
+              group: root
+              mode: 0644
+
+          - name: Environment Proxy
+            copy:
+              src: ./intel.sh
+              dest: /etc/profile.d/70_intel.sh
+              owner: root
+              group: root
+              mode: 0755
+
+          - name: Update OS
+            apt: 
+              name: '*'
+              state: latest
+
+          - name: Install curl, wget, vim, tmux,nc, git, Python
+            apt: 
+              name: curl,wget,vim,tmux,netcat-openbsd,git,python
+              state: present
+
+#          - name: Docker installer
+#            copy: 
+#              src: ./indocker.sh
+#              dest: /root/indocker.sh
+#              owner: root
+#              mode: 750
+#
+#          - name: Install Docker
+#            shell: cd /root && /root/indocker.sh
+#
+#          - name: Configure proxy for Docker step 1 create docker.service.d
+#            file:
+#              path: /etc/systemd/system/docker.service.d
+#              state: directory
+#              mode: 0755
+#
+#          - name: Create proxy conf file
+#            copy:
+#              src: ./http-proxy.conf
+#              dest: /etc/systemd/system/docker.service.d/http-proxy.conf
+#              owner: root
+#              group: root
+#              mode: 0644
+#          
+#          - name: Daemon Reload (Systemd)
+#            systemd:
+#              state: restarted
+#              daemon_reload: yes
+#              name: docker
+#          
+#          - name: Chamaleon Socks
+#            copy:
+#              src: ./chameleonsocks.sh
+#              dest: /root
+#              owner: root
+#              group: root
+#              mode: 0755
+#
+#          - name: Chamaleon Exceptions
+#            copy:
+#              src: ./chameleonsocks.exceptions
+#              dest: /root
+#              owner: root
+#              group: root
+#              mode: 0644
+#
+#          - name: Installer script
+#            copy:
+#              src: ./install.sh
+#              dest: /root
+#              owner: root
+#              group: root
+#              mode: 0755
+#
+#          - name: Install Chamaleon Socks
+#            command: bash /root/install.sh
+#
+#          - name: Workaround iptables by Fabs
+#            iptables:
+#                    chain: INPUT
+#                    in_interface: docker0
+#                    jump: ACCEPT
+#
+#          - name: Save iptables
+#            shell: "/usr/sbin/iptables-save > /etc/sysconfig/iptables-save"
+#
+#          - name: Enable rc-local
+#            systemd:
+#                    name: rc-local
+#                    enabled: yes
+##

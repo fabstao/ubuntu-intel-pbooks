@@ -1,0 +1,15 @@
+[clear]
+192.168.0.181 ansible_ssh_private_key_file=~/ansible/ckey
+
+[ubuntu]
+10.219.105.87	 ansible_ssh_private_key_file=~/maas2
+
+[centos]
+10.219.105.140  #ansible_ssh_private_key_file=keys/maas2
+
+[nuc]
+10.219.128.60
+
+[qat]
+10.219.105.12
+10.219.105.13
